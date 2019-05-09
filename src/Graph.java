@@ -292,6 +292,7 @@ public class Graph {
               remaining.add(neighbor);
             }
           }
+          visited[e.from()] = true;
         }
         
         if (visited[e.to()] == false) {
@@ -302,9 +303,8 @@ public class Graph {
               remaining.add(neighbor);
             }
           }
+          visited[e.to()] = true;
         }
-        visited[e.from()] = true;
-        visited[e.to()] = true;
       }
     }
  

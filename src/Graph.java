@@ -288,7 +288,7 @@ public class Graph {
           Iterator<Edge> edges = this.edgesFrom(e.from());
           while (edges.hasNext()) {
             Edge neighbor = edges.next();
-            if (visited[neighbor.to()] != false) {
+            if (visited[neighbor.to()] == false) {
               remaining.add(neighbor);
             }
           }
@@ -299,7 +299,7 @@ public class Graph {
           Iterator<Edge> edgesTo = this.edgesFrom(e.to());
           while (edgesTo.hasNext()) {
             Edge neighbor = edgesTo.next();
-            if (visited[neighbor.to()] != false) {
+            if (visited[neighbor.to()] == false) {
               remaining.add(neighbor);
             }
           }

@@ -8,6 +8,7 @@ import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -237,6 +238,81 @@ public class Graph {
       } // if
     } // for
   } // write(PrintWriter)
+  
+  public Edge minEdge(int vertex) {
+    Iterator<Edge> edgesFromVertex = this.edgesFrom(vertex);
+    // get the first edge in the list
+    Edge minEdge = vertices[vertex].get(0);
+    while (edgesFromVertex.hasNext()) {
+      Edge tempEdge = edgesFromVertex.next();
+      if (tempEdge.weight() < minEdge.weight()) {
+        minEdge = tempEdge;
+      }
+    }
+    return minEdge;   
+  }
+  public void MST(int vertex) {
+ //   Pick a random vertex
+    PriorityQueue<Edge> remaining = new PriorityQueue<Edge>(this.numVertices, (a,b) -> a.weight() - b.weight());
+    List<Edge> MST = new ArrayList<Edge>();
+    
+    boolean[] visited = new boolean[vertices.length];
+    for (int i = 0; i < visited.length; i++) {
+      visited[i] = false;
+    }
+    
+  //  Add all of the edges from that vertex to remaining
+    Iterator<Edge> edgesFromVertex = this.edgesFrom(vertex);
+    while (edgesFromVertex.hasNext()) {
+      Edge e = edgesFromVertex.next();
+      remaining.add(e);
+    }
+    // so we would not add the adjacent vertices from vertex again
+    visited[vertex] = true;
+    
+//  While edges remain
+//  Grab the remaining edge with the lowest weight
+//  If either vertex is not in the MST
+//    Add the edge to mst
+//    Add all the edges from that vertex to remaining
+//      (arguably, you should only add those that don't lead back to the MST)
+    
+    while (!remaining.isEmpty()) {
+      Edge e = remaining.remove();
+      if (visited[e.from()] == false || visited[e.to()] == false) {
+        MST.add(e);
+        System.out.println("Adding " + e.from() + "->" + e.to());
+        // add all the edges from that vertex to remaining
+
+        if (visited[e.from()] == false) {
+          Iterator<Edge> edges = this.edgesFrom(e.from());
+          while (edges.hasNext()) {
+            Edge neighbor = edges.next();
+            if (visited[neighbor.to()] != false) {
+              remaining.add(neighbor);
+            }
+          }
+        }
+        
+        if (visited[e.to()] == false) {
+          Iterator<Edge> edgesTo = this.edgesFrom(e.to());
+          while (edgesTo.hasNext()) {
+            Edge neighbor = edgesTo.next();
+            if (visited[neighbor.to()] != false) {
+              remaining.add(neighbor);
+            }
+          }
+        }
+        visited[e.from()] = true;
+        visited[e.to()] = true;
+      }
+    }
+ 
+    for (int i = 0; i < MST.size(); i++) {
+      System.out.println(MST.get(i).from() + "-->" + MST.get(i).to());
+    }
+
+  }
 
   /**
    * Get the number of edges.
@@ -367,11 +443,16 @@ public class Graph {
     if (incoming[finish] == null) {
       return null;
     } else {
+      // create a linked list of edges
       LinkedList<Edge> path = new LinkedList<Edge>();
+      // starts from the vertex we need to reach and trace backwards
       int current = finish;
       do {
+        // get the edge coming to that vertex
         Edge e = incoming[current];
+        // add it to the path list
         path.addFirst(e);
+        // get the vertex the edges come from, update current
         current = e.from();
       } while (current != start);
       return path;
@@ -419,6 +500,10 @@ public class Graph {
       } // next()
     }; // new Iterator<Integer>
   } // vertices()
+  
+  
+  
+  
 
   // +----------+----------------------------------------------------
   // | Mutators |

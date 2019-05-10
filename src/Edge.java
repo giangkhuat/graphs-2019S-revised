@@ -24,6 +24,7 @@ public class Edge {
    * The weight of the edge.
    */
   private Integer weight;
+  private int pathWeight;
 
   // +--------------+------------------------------------------------
   // | Constructors |
@@ -77,6 +78,7 @@ public class Edge {
   public int to() {
     return this.to;
   } // to()
+  
 
   /**
    * Get the weight of the edge.  Returns 0 for an unweighted edge.

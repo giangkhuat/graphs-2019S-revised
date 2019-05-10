@@ -60,6 +60,7 @@ public class GraphExperiment {
     g.removeEdge("a", "c");
     g.dump(pen);
     g.MST(0);
+    g.shortestPath(1, 2);
   } // main(String[])
 
 } // class GraphExperiment

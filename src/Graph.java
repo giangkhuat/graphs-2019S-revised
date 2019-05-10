@@ -41,6 +41,8 @@ public class Graph {
    * The default initial capacity (# of nodes) of the graph.
    */
   static final int INITIAL_CAPACITY = 16;
+  
+  private int max = 100;
 
   /**
    * A few of the valid marks.
@@ -313,6 +315,67 @@ public class Graph {
     }
 
   }
+  
+  
+  public List<Vertex> shortestPath(int start, int end) {
+    PriorityQueue<Vertex> remaining =
+        new PriorityQueue<Vertex>(this.numVertices, (a, b) -> a.pathWeight() - b.pathWeight());
+    List<Vertex> minPath = new ArrayList<Vertex>();
+
+    boolean[] visited = new boolean[vertices.length];
+    for (int i = 0; i < visited.length; i++) {
+      visited[i] = false;
+    }
+
+    int[] distance = new int[vertices.length];
+    for (int i = 0; i < distance.length; i++) {
+      distance[i] = this.max;
+    }
+    // distance btw starting point and itself is 0
+    distance[start] = 0;
+    // let previous vertex of starting vertex be itself
+    remaining.add(new Vertex(start, 0, start));
+
+    while (!remaining.isEmpty() && (visited[end] == false)) {
+      Vertex v = remaining.remove();
+      minPath.add(v);
+      Iterator<Edge> neighbors = this.edgesFrom(v.vertexNum);
+      visited[v.vertexNum] = true;
+      while (neighbors.hasNext()) {
+        Edge e = neighbors.next();
+       int neighborV = e.to();
+        if (visited[neighborV] == false) {
+          int fromStart = v.pathWeight() + e.weight();
+          if (fromStart < distance[neighborV]) {
+            // if vertex existed in the queue
+            if (distance[neighborV] != this.max) {
+              // iterate to find that vertex and remove
+              Iterator<Vertex> vertices = remaining.iterator();
+              while (vertices.hasNext()) {
+                Vertex tempVer = vertices.next();
+                if (tempVer.vertexNum == neighborV) {
+                  vertices.remove();
+                  break;
+                }
+              }
+            }
+            remaining.add(new Vertex(e.to(), fromStart, e.from()));
+          }
+        }
+      }
+    }
+
+    if (visited[end]) {
+      for (int i = 0; i < minPath.size(); i++) {
+        System.out.println(minPath.get(i).prevVertex + " -> " + minPath.get(i).vertexNum);
+      }
+    }
+    return minPath;
+  }
+  
+  
+  
+  
 
   /**
    * Get the number of edges.

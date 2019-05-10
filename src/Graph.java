@@ -337,6 +337,7 @@ public class Graph {
     remaining.add(new Vertex(start, 0, start));
 
     while (!remaining.isEmpty() && (visited[end] == false)) {
+      // pop a vertex out of the queue
       Vertex v = remaining.remove();
       minPath.add(v);
       Iterator<Edge> neighbors = this.edgesFrom(v.vertexNum);
@@ -359,6 +360,7 @@ public class Graph {
                 }
               }
             }
+            distance[neighborV] = fromStart;
             remaining.add(new Vertex(e.to(), fromStart, e.from()));
           }
         }
@@ -366,8 +368,8 @@ public class Graph {
     }
 
     if (visited[end]) {
-      for (int i = 0; i < minPath.size(); i++) {
-        System.out.println(minPath.get(i).prevVertex + " -> " + minPath.get(i).vertexNum);
+      for (int i = minPath.size() -1; i >= 0; i--) {
+        System.out.println(minPath.get(i).prevVertex + " <- " + minPath.get(i).vertexNum);
       }
     }
     return minPath;

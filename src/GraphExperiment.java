@@ -51,16 +51,18 @@ public class GraphExperiment {
     }
     
     // Add/replace a bunch of edges
+    /*
     for (int i = 1; i <= 4; i++) {
       g.addEdge(0,i,i*10);
     } // for
     g.dump(pen);
+    */
     
     // Remove an edge
     g.removeEdge("a", "c");
     g.dump(pen);
-    g.MST(0);
-    g.shortestPath(1, 2);
+   // g.MST(0);
+    g.shortestPath(1, 3);
   } // main(String[])
 
 } // class GraphExperiment

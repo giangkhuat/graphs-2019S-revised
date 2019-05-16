@@ -1,4 +1,5 @@
 import java.io.PrintWriter;
+import java.util.Iterator;
 
 /**
  * A quick experiment with graphs.
@@ -63,6 +64,18 @@ public class GraphExperiment {
     g.dump(pen);
    // g.MST(0);
     g.shortestPath(1, 3);
+    
+    pen.println("Traversing edges");
+    Iterator<Edge> edge = g.edges();
+    while (edge.hasNext()) {
+      Edge e = edge.next();
+      pen.println(e.from() + " -> "+ e.to());
+      if (e.to() == 0) {
+        edge.remove();
+      }
+    }
+    g.dump(pen);
+    
   } // main(String[])
 
 } // class GraphExperiment

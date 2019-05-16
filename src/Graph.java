@@ -400,6 +400,8 @@ public class Graph {
     return new Iterator<Edge>() {
       // The position of the iterator
       int pos = 0;
+      // edge to be removed
+      Edge tobeRemoved;
       // The version number of the graph when this iterator was created
       long version = Graph.this.version;
       // The current edge iterator
@@ -426,8 +428,24 @@ public class Graph {
           this.ie = Graph.this.vertices[++this.vertex].iterator();
         } // while
         ++this.pos;
-        return ie.next();
+        tobeRemoved = ie.next();
+        return tobeRemoved;
       } // next()
+      
+     public void remove() {
+       failFast(this.version);
+       Integer fromVertex = this.tobeRemoved.from();
+       Iterator<Edge> ie = Graph.this.edgesFrom(fromVertex);
+       while (ie.hasNext()) {
+         if (ie.next().to() == this.tobeRemoved.to()) {
+           ie.remove();
+         }
+       }
+       Graph.this.version++;
+       this.version++;
+       Graph.this.numEdges--;
+       
+     }
     }; // new Iterator<Edge>
   } // edges()
 
